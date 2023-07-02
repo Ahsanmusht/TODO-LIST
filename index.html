@@ -1,255 +1,159 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo List</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.6.1/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css">
-  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&display=swap" rel="stylesheet">
- 
+  <title>Advanced Chatbot Example</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <style>
-     body {
-      font-family: 'Dosis', sans-serif;
+    .chat-container {
+      height: 400px;
+      overflow-y: scroll;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 10px;
     }
-    .todo-card {
-      width: 300px;
-      margin-bottom: 15px;
+    .chat-message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 15px;
     }
-    .todo-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
+    .user-message {
+      text-align: right;
+      background-color: #e6f7ff;
+      color: #333333;
     }
-    .navbar {
-      padding-top: 15px;
-      padding-bottom: 15px;
-      margin-bottom: 30px;
+    .bot-message {
+      text-align: left;
+      background-color: #f0f0f0;
+      color: #333333;
     }
-    .navbar .container {
-      display: flex;
-      align-items: center;
-    }
-    .navbar-brand {
-      font-size: 24px;
-      font-weight: bold;
-      flex-grow: 1;
-    }
-    .search-input {
-      width: 300px;
-      margin-left: auto;
-    }
-    .todo-form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .todo-form .form-label {
-      font-weight: bold;
-    }
-    .add-todo-button {
-      align-self: flex-end;
-    }
-    .todo-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .todo-list .card {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .todo-list .card .card-body {
-      display: flex;
-      gap: 10px;
-    }
-    .edit-buttons i {
-      cursor: pointer;
+    .input-container {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <h1 class="navbar-brand">Todo List</h1>
-      <input type="text" id="search-input" class="form-control search-input" placeholder="Search...">
-    </div>
-  </nav>
-
   <div class="container mt-5">
-    <form id="todo-form" class="todo-form">
-      <div class="mb-3">
-        <label for="todo-text" class="form-label">Todo Text</label>
-        <input type="text" id="todo-text" class="form-control" required>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            Chatbot
+          </div>
+          <div class="card-body chat-container" id="chatArea">
+            <div class="chat-message bot-message">
+              <p>Welcome! How can I assist you today?</p>
+            </div>
+          </div>
+          <div class="card-footer input-container">
+            <input type="text" class="form-control" id="userInput" placeholder="Type your message...">
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="todo-image" class="form-label">Todo Image</label>
-        <input type="file" id="todo-image" class="form-control">
-      </div>
-      <button type="submit" class="btn btn-primary add-todo-button">Add Todo</button>
-    </form>
-
-    <div id="todo-list" class="mt-4 todo-list"></div>
+    </div>
   </div>
 
+  <!-- Include Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const todoForm = document.getElementById('todo-form');
-    const todoText = document.getElementById('todo-text');
-    const todoImage = document.getElementById('todo-image');
-    const todoList = document.getElementById('todo-list');
-    const searchInput = document.getElementById('search-input');
+    // Advanced Chatbot implementation
+    const chatbot = {
+      response: {
+        default: "I'm sorry, I don't understand. Can you please rephrase your question?",
+        greetings: ["Hello!", "Hi there!", "Welcome! How can I assist you?"],
+        bye: ["Goodbye!", "See you later!", "Have a nice day!"],
+        thankYou: ["You're welcome!", "No problem!", "Glad I could help!"],
+        weather: ["The weather is sunny today.", "Expect some rain later.", "It's going to be a cold day."],
+        news: ["There's a new technology breakthrough.", "The stock market is performing well.", "Sports news: Team A wins the championship."],
+        question: ["I'm sorry, I cannot answer that question at the moment.", "I don't have the information you're looking for."],
+        response1: ["Response 1", "Response 1", "Response 1", "Additional data 1", "Additional data 2"],
+        response2: ["Response 2", "Response 2", "Response 2", "Additional data 1", "Additional data 2"],
+        response3: ["Response 3", "Response 3", "Response 3", "Additional data 1", "Additional data 2"],
+        response4: ["Response 4", "Response 4", "Response 4", "Additional data 1", "Additional data 2"],
+        response5: ["Response 5", "Response 5", "Response 5", "Additional data 1", "Additional data 2"],
+        response6: ["Response 6", "Response 6", "Response 6"],
+        response7: ["Response 7", "Response 7", "Response 7"],
+        response8: ["Response 8", "Response 8", "Response 8"],
+        response9: ["Response 9", "Response 9", "Response 9"],
+        response10: ["Response 10", "Response 10", "Response 10"],
+      },
+      processMessage: function (message) {
+        const lowercaseMessage = message.toLowerCase();
+        let response = this.response.default;
 
-    let todos = [];
-
-    // Load todos from local storage
-    function loadTodos() {
-      const storedTodos = localStorage.getItem('todos');
-      todos = storedTodos ? JSON.parse(storedTodos) : [];
-    }
-
-    // Save todos to local storage
-    function saveTodos() {
-      localStorage.setItem('todos', JSON.stringify(todos));
-    }
-
-    // Render todos
-    function renderTodos() {
-      const filteredTodos = todos.filter(todo => todo.text.toLowerCase().includes(searchInput.value.toLowerCase()));
-
-      todoList.innerHTML = '';
-
-      filteredTodos.forEach(todo => {
-        const todoCard = document.createElement('div');
-        todoCard.classList.add('card', 'todo-card');
-
-        const todoImageContainer = document.createElement('div');
-        todoImageContainer.classList.add('position-relative');
-
-        const todoImage = document.createElement('img');
-        todoImage.src = todo.image;
-        todoImage.alt = 'Todo Image';
-        todoImage.classList.add('card-img-top');
-
-        const editImageButton = document.createElement('i');
-        editImageButton.classList.add('btn', 'btn-primary','position-absolute', 'top-0', 'end-0', 'm-2' );
-        editImageButton.innerHTML = '<i class="fa fa-pencil"></i>';
-        editImageButton.addEventListener('click', () => {
-          editTodoImage(todo);
-        });
-
-        todoImageContainer.appendChild(todoImage);
-        todoImageContainer.appendChild(editImageButton);
-
-        const todoCardBody = document.createElement('div');
-        todoCardBody.classList.add('card-body');
-
-        const todoText = document.createElement('h5');
-        todoText.textContent = todo.text;
-
-        const editButton = document.createElement('i');
-        editButton.classList.add('btn', 'btn-primary', 'me-2');
-        editButton.innerHTML = '<i class="fa fa-pencil"></i>';
-        editButton.addEventListener('click', () => {
-          editTodoText(todo);
-        });
-
-        const deleteButton = document.createElement('i');
-        deleteButton.classList.add('btn', 'btn-danger');
-        deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
-        deleteButton.addEventListener('click', () => {
-          deleteTodoById(todo.id);
-        });
-
-        todoCardBody.appendChild(todoText);
-        todoCardBody.appendChild(editButton);
-        todoCardBody.appendChild(deleteButton);
-
-        todoCard.appendChild(todoImageContainer);
-        todoCard.appendChild(todoCardBody);
-
-        todoList.appendChild(todoCard);
-      });
-    }
-
-    // Add a new todo to the list
-    function addTodo() {
-      const text = todoText.value;
-      const image = todoImage.files[0] ? URL.createObjectURL(todoImage.files[0]) : '';
-      const id = Date.now().toString();
-      const todo = { id, text, image };
-
-      todos.push(todo);
-      saveTodos();
-      clearInputFields();
-      renderTodos();
-    }
-
-    // Edit the todo text
-    function editTodoText(todo) {
-      const newText = prompt('Enter the updated text:', todo.text);
-
-      if (newText) {
-        todo.text = newText;
-        saveTodos();
-        renderTodos();
-      }
-    }
-
-    // Edit the todo image
-    function editTodoImage(todo) {
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'image/*';
-
-      fileInput.addEventListener('change', () => {
-        if (fileInput.files && fileInput.files[0]) {
-          const reader = new FileReader();
-
-          reader.onload = function (e) {
-            todo.image = e.target.result;
-            saveTodos();
-            renderTodos();
-          };
-
-          reader.readAsDataURL(fileInput.files[0]);
+        if (lowercaseMessage.includes("hello") || lowercaseMessage.includes("hi")) {
+          response = this.response.greetings[Math.floor(Math.random() * this.response.greetings.length)];
+        } else if (lowercaseMessage.includes("bye")) {
+          response = this.response.bye[Math.floor(Math.random() * this.response.bye.length)];
+        } else if (lowercaseMessage.includes("thank you") || lowercaseMessage.includes("thanks")) {
+          response = this.response.thankYou[Math.floor(Math.random() * this.response.thankYou.length)];
+        } else if (lowercaseMessage.includes("weather")) {
+          response = this.response.weather[Math.floor(Math.random() * this.response.weather.length)];
+        } else if (lowercaseMessage.includes("news")) {
+          response = this.response.news[Math.floor(Math.random() * this.response.news.length)];
+        } else if (lowercaseMessage.includes("question")) {
+          response = this.response.question[Math.floor(Math.random() * this.response.question.length)];
+        } else if (lowercaseMessage.includes("response1")) {
+          response = this.response.response1[Math.floor(Math.random() * this.response.response1.length)];
+        } else if (lowercaseMessage.includes("response2")) {
+          response = this.response.response2[Math.floor(Math.random() * this.response.response2.length)];
+        } else if (lowercaseMessage.includes("response3")) {
+          response = this.response.response3[Math.floor(Math.random() * this.response.response3.length)];
+        } else if (lowercaseMessage.includes("response4")) {
+          response = this.response.response4[Math.floor(Math.random() * this.response.response4.length)];
+        } else if (lowercaseMessage.includes("response5")) {
+          response = this.response.response5[Math.floor(Math.random() * this.response.response5.length)];
+        } else if (lowercaseMessage.includes("response6")) {
+          response = this.response.response6[Math.floor(Math.random() * this.response.response6.length)];
+        } else if (lowercaseMessage.includes("response7")) {
+          response = this.response.response7[Math.floor(Math.random() * this.response.response7.length)];
+        } else if (lowercaseMessage.includes("response8")) {
+          response = this.response.response8[Math.floor(Math.random() * this.response.response8.length)];
+        } else if (lowercaseMessage.includes("response9")) {
+          response = this.response.response9[Math.floor(Math.random() * this.response.response9.length)];
+        } else if (lowercaseMessage.includes("response10")) {
+          response = this.response.response10[Math.floor(Math.random() * this.response.response10.length)];
         }
-      });
 
-      fileInput.click();
-    }
+        return response;
+      },
+      displayMessage: function (message, sender) {
+        const chatArea = document.getElementById("chatArea");
+        const messageContainer = document.createElement("div");
+        messageContainer.classList.add("chat-message");
 
-    // Delete a todo by ID
-    function deleteTodoById(id) {
-      todos = todos.filter(todo => todo.id !== id);
-      saveTodos();
-      renderTodos();
-    }
+        if (sender === "user") {
+          messageContainer.classList.add("user-message");
+        } else {
+          messageContainer.classList.add("bot-message");
+        }
 
-    // Clear input fields
-    function clearInputFields() {
-      todoText.value = '';
-      todoImage.value = '';
-    }
+        messageContainer.innerHTML = `<p>${message}</p>`;
+        chatArea.appendChild(messageContainer);
+      },
+      init: function () {
+        const userInput = document.getElementById("userInput");
+        const self = this;
 
-    // Initialize the todo list
-    function init() {
-      loadTodos();
-      renderTodos();
+        userInput.addEventListener("keyup", function (event) {
+          if (event.key === "Enter") {
+            const message = userInput.value.trim();
 
-      todoForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        addTodo();
-      });
+            if (message !== "") {
+              self.displayMessage(message, "user");
 
-      searchInput.addEventListener('input', () => {
-        renderTodos();
-      });
-    }
+              const botResponse = self.processMessage(message);
+              self.displayMessage(botResponse, "bot");
 
-    // Run initialization
-    init();
+              userInput.value = "";
+            }
+          }
+        });
+      },
+    };
+
+    // Initialize the chatbot
+    chatbot.init();
   </script>
 </body>
 </html>

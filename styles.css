@@ -1,0 +1,51 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  form {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  select,
+  input[type="number"] {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .movie {
+    margin-bottom: 10px;
+  }
+  
+  .movie-title {
+    font-weight: bold;
+  }
+  
+  .movie-details {
+    margin-bottom: 5px;
+  }
+  
+  .average-rating {
+    color: #999;
+  }
+  
